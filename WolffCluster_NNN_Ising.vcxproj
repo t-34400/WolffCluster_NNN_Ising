@@ -140,6 +140,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Ising.h" />
+    <ClInclude Include="isingConstant.h" />
+    <ClInclude Include="mersenne.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ising.cpp" />
