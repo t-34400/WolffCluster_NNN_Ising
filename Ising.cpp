@@ -1,4 +1,5 @@
 #include "Ising.h"
+#include "mersenne.h"
 
 Ising::Ising()
 {

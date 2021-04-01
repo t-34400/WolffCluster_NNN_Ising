@@ -1,6 +1,5 @@
 #pragma once
 #include "isingConstant.h"
-#include "mersenne.h"
 #include <array>
 
 class Ising
