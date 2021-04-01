@@ -3,7 +3,7 @@
 
 namespace mersenne
 {
-	std::mt19937 mt;
+	extern std::mt19937 mt;
 
 	bool getTF();
 	double getProbability();
