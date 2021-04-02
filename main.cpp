@@ -1,15 +1,13 @@
 #include "Ising.h"
+#include "Wolff.h"
 #include <iostream>
 
 int main()
 {
-	if (true ^ true)
-		std::cout << "1 yes.\n";
-	if (true ^ false)
-		std::cout << "2 yes\n";
-	if (false ^ true)
-		std::cout << "3 yes\n";
-	if (false ^ false)
-		std::cout << "4 yes\n";
+	Ising ising;
+	Wolff wolff(ising, 0.44068679350977147, 0);
+	
+	wolff.stepForward(1);
+
 	return 0;
 }

@@ -14,8 +14,8 @@ void Wolff::setTemperature(double temp)
 {
 	assert(temp > 0);
 	m_temp = temp;
-	m_growthProbability_vh = std::exp(-2.0 * m_cp_vh / temp);
-	m_growthProbability_vh = std::exp(-2.0 * m_cp_diag / temp);
+	m_growthProbability_vh = 1 - std::exp(-2.0 * m_cp_vh / temp);
+	m_growthProbability_vh = 1 - std::exp(-2.0 * m_cp_diag / temp);
 }
 
 void Wolff::stepForward(int steps)
