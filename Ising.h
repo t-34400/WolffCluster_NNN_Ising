@@ -1,6 +1,5 @@
 #pragma once
 #include "isingConstant.h"
-#include "mersenne.h"
 #include <array>
 
 class Ising
@@ -15,6 +14,38 @@ public:
 
 	void initializeSpin();
 
-	void flip(size_t index);
-	bool getValue(size_t index) const;
+	void flip(int time, int space);
+	bool getValue(int time, int space) const;
+
+	// manipulate the spin site index
+	// avoid the use of modulo(%) for efficiency
+	inline static int moveForwardInTime(int time)
+	{
+		++time;
+		if (time >= isingConstant::timeSize)
+			time = 0;
+		return time;
+	}
+	inline static int moveBackwardInTime(int time)
+	{
+		--time;
+		if (time < 0)
+			time = isingConstant::timeSize - 1;
+		return time;
+	}
+
+	inline static int moveForwardInSpace(int space)
+	{
+		++space;
+		if (space >= isingConstant::spaceSize)
+			space = 0;
+		return space;
+	}
+	inline static int moveBackwardInSpace(int space)
+	{
+		--space;
+		if (space < 0)
+			space = isingConstant::spaceSize - 1;
+		return space;
+	}
 };

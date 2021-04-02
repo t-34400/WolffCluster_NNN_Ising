@@ -142,9 +142,13 @@
     <ClInclude Include="Ising.h" />
     <ClInclude Include="isingConstant.h" />
     <ClInclude Include="mersenne.h" />
+    <ClInclude Include="Wolff.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ising.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="mersenne.cpp" />
+    <ClCompile Include="Wolff.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
