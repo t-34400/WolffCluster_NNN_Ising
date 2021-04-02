@@ -5,6 +5,7 @@ namespace mersenne
 {
 	extern std::mt19937 mt;
 
-	bool getTF();
+	bool getRandomBool();
+	int getRandomInt(int min, int max);
 	double getProbability();
 }
