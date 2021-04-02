@@ -1,1 +1,1 @@
-# Wolff cluste algorithm for ising model with Next-nearest neighbor interaction
+# Wolff cluster algorithm for ising model with Next-nearest neighbor interaction
