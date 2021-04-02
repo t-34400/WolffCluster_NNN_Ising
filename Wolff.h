@@ -26,10 +26,10 @@ private:
 	bool checkFlipping(bool candidateSitesDirection, bool isDiagonal);
 
 public:
-	Wolff(Ising& ising, double cp_vh, double cp_diag = 0.0, double temp = 1.0);
+	Wolff(double cp_vh, double cp_diag = 0.0, double temp = 1.0);
 
 	void initialize();
-	void setTemperature(double temp);
+	void setTemperature(double temp=1.0);
 	void stepForward(int steps=1);
 
 	// get magnetization per site

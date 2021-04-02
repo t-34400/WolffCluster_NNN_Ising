@@ -24,7 +24,7 @@ bool Ising::getValue(int time, int space) const
 	return m_spins.at(index);
 }
 
-const auto& Ising::getIsingArray() const
+const  std::array<bool, isingConstant::latticeSize>& Ising::getIsingArray() const
 {
 	return m_spins;
 }

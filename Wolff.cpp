@@ -4,8 +4,8 @@
 #include <cassert>
 #include <cmath>
 
-Wolff::Wolff(Ising& ising, double cp_vh, double cp_diag, double temp)
-	:m_ising{ ising }, m_cp_vh{ cp_vh }, m_cp_diag{ cp_diag }
+Wolff::Wolff(double cp_vh, double cp_diag, double temp)
+	:m_cp_vh{ cp_vh }, m_cp_diag{ cp_diag }
 {
 	setTemperature(temp);
 }
@@ -20,7 +20,7 @@ void Wolff::setTemperature(double temp)
 	assert(temp > 0);
 	m_temp = temp;
 	m_growthProbability_vh = 1 - std::exp(-2.0 * m_cp_vh / temp);
-	m_growthProbability_vh = 1 - std::exp(-2.0 * m_cp_diag / temp);
+	m_growthProbability_diag = 1 - std::exp(-2.0 * m_cp_diag / temp);
 }
 
 void Wolff::stepForward(int steps)
@@ -111,10 +111,11 @@ double Wolff::getEnergy() const
 	int timeBackward{};
 	int spaceForward{};
 	bool originalDirection;
+	int space{};
 
 	for (int time{ 0 };time<isingConstant::timeSize;++time)
 	{ 
-		for (int space{ 0 }; space < isingConstant::spaceSize; ++space)
+		for (space = 0; space < isingConstant::spaceSize; ++space)
 		{
 			timeForward = Ising::moveForwardInTime(time);
 			timeBackward = Ising::moveBackwardInTime(time);
@@ -128,10 +129,36 @@ double Wolff::getEnergy() const
 		}
 	}
 
-	return m_cp_vh * energy_vh + m_cp_diag * energy_diag;
+	return (m_cp_vh * energy_vh + m_cp_diag * energy_diag) / isingConstant::latticeSize;
 }
 double Wolff::getCorrelationInTime(int distance) const
 {
 	assert(distance <= isingConstant::timeSize / 2);
 
+	int correlation{ 0 };
+
+	// spatial coordinate of one site
+	int space1{};
+	// spin direction of one site
+	bool spin1{};
+	// spatial coordinate of another site
+	int space2{};
+	// time coordinate of another site
+	int time2{ distance };
+
+	for (int time1{ 0 }; time1 < isingConstant::timeSize; ++time1)
+	{
+		// sum in spatial direction to get zero-momentum
+		for (space1 = 0; space1 < isingConstant::spaceSize; ++space1)
+		{
+			spin1 = m_ising.getValue(time1, space1);
+			for (space2 = 0; space2 < isingConstant::spaceSize; ++space2)
+			{
+				correlation += (spin1 ^ m_ising.getValue(time2, space2)) ? -1 : 1;
+			}
+		}
+		time2 = Ising::moveForwardInTime(time2);
+	}
+
+	return static_cast<double>(correlation) / (isingConstant::latticeSize * isingConstant::spaceSize);
 }
