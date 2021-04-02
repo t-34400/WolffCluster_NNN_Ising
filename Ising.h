@@ -16,6 +16,7 @@ public:
 
 	void flip(int time, int space);
 	bool getValue(int time, int space) const;
+	const std::array<bool, isingConstant::latticeSize>& getIsingArray() const;
 
 	// manipulate the spin site index
 	// avoid the use of modulo(%) for efficiency
