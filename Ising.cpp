@@ -23,3 +23,8 @@ bool Ising::getValue(int time, int space) const
 	int index{ time * isingConstant::spaceSize + space };
 	return m_spins.at(index);
 }
+
+const auto& Ising::getIsingArray() const
+{
+	return m_spins;
+}

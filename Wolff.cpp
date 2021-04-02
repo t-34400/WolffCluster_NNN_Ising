@@ -10,6 +10,11 @@ Wolff::Wolff(Ising& ising, double cp_vh, double cp_diag, double temp)
 	setTemperature(temp);
 }
 
+void Wolff::initialize()
+{
+	m_ising.initializeSpin();
+}
+
 void Wolff::setTemperature(double temp)
 {
 	assert(temp > 0);
@@ -82,4 +87,51 @@ bool Wolff::checkFlipping(bool candidateSitesDirection, bool isDiagonal)
 		}
 	}
 	return false;
+}
+
+double Wolff::getMagnetization() const
+{
+	int magnetization{ 0 };
+	for (auto spin : m_ising.getIsingArray())
+	{
+		magnetization += spin ? 1 : -1;
+	}
+	return static_cast<double>(magnetization) / isingConstant::latticeSize;
+}
+
+double Wolff::getEnergy() const
+{
+	// energy of vertical/horizonal interaction
+	int energy_vh{ 0 };
+	// diagonal interaction
+	int energy_diag{ 0 };
+
+	// temporary variable
+	int timeForward{};
+	int timeBackward{};
+	int spaceForward{};
+	bool originalDirection;
+
+	for (int time{ 0 };time<isingConstant::timeSize;++time)
+	{ 
+		for (int space{ 0 }; space < isingConstant::spaceSize; ++space)
+		{
+			timeForward = Ising::moveForwardInTime(time);
+			timeBackward = Ising::moveBackwardInTime(time);
+			spaceForward = Ising::moveForwardInSpace(space);
+			originalDirection = m_ising.getValue(time, space);
+
+			energy_vh += (originalDirection ^ m_ising.getValue(timeForward, space)) ? -1 : 1;
+			energy_vh += (originalDirection ^ m_ising.getValue(time, spaceForward)) ? -1 : 1;
+			energy_diag += (originalDirection ^ m_ising.getValue(timeForward, spaceForward)) ? -1 : 1;
+			energy_diag += (originalDirection ^ m_ising.getValue(timeBackward, spaceForward)) ? -1 : 1;
+		}
+	}
+
+	return m_cp_vh * energy_vh + m_cp_diag * energy_diag;
+}
+double Wolff::getCorrelationInTime(int distance) const
+{
+	assert(distance <= isingConstant::timeSize / 2);
+
 }
